@@ -1,5 +1,7 @@
+using MHRSLiteDataAccessLayer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,6 +24,12 @@ namespace MHRSLiteUI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //AspNet Core ConnectionString baðlantýsý yapabilmesi için servislerine DbContext eklenmesi gerekiyor.
+            services.AddDbContext<MyContext>(options=>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("SqlConnection"));
+            });
+
             services.AddControllersWithViews();
         }
 

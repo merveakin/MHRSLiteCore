@@ -16,4 +16,9 @@ namespace MHRSLiteEntityLayer.Enums
         Kadın,
         Erkek
     }
+    public enum RoleNames : byte
+    {
+        Passive,
+        Admin
+    }
 }

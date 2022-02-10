@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MHRSLiteEntityLayer.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -32,6 +33,7 @@ namespace MHRSLiteUI.Models
         [Display(Name = "Şifre Tekrar")]
         [Compare(nameof(Password), ErrorMessage = "Şifreler uyuşmuyor")]
         public string ConfirmPassword { get; set; }
-
+        [Required(ErrorMessage = "Cinsiyet bilgisi gereklidir.")]
+        public Genders Gender { get; set; }
     }
 }

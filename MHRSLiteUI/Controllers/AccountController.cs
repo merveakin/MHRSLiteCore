@@ -309,6 +309,5 @@ namespace MHRSLiteUI.Controllers
                 return View(model);
             }
         }
-
     }
 }

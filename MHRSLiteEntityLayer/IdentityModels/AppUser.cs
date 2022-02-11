@@ -1,4 +1,5 @@
 ﻿using MHRSLiteEntityLayer.Enums;
+using MHRSLiteEntityLayer.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -27,5 +28,9 @@ namespace MHRSLiteEntityLayer.IdentityModels
         [Required(ErrorMessage = "Cinsiyet bilgisi gereklidir.")]
         public Genders Gender { get; set; }
 
+        //Doctor tablosunda ilişki kuruldu.
+        public virtual List<Doctor> Doctors { get; set; }
+        //Patient(Hasta) tablosunda ilişki kuruldu.
+        public virtual List<Patient> Patients { get; set; }
     }
 }

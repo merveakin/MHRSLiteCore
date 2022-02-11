@@ -19,6 +19,6 @@ namespace MHRSLiteEntityLayer.Models
         [ForeignKey("DistrictId")]
         public virtual District HospitalDistrict { get; set; }
         //HospitalClinics tablosunda ilişki kuruldu.
-        public virtual List<HospitalClinics> HospitalClinics { get; set; }
+        public virtual List<HospitalClinic> HospitalClinics { get; set; }
     }
 }

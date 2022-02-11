@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace MHRSLiteEntityLayer.Models
 {
-    public class HospitalClinics : Base<int>
+    [Table("HospitalClinics")]
+    public class HospitalClinic : Base<int>
     {
         //Hastane ile ilişki kuruldu.
         public int HospitalId { get; set; }
@@ -24,7 +25,7 @@ namespace MHRSLiteEntityLayer.Models
         public string DoctorId { get; set; }
         [ForeignKey("DoctorId")]
         public virtual Doctor Doctor { get; set; }
-         public virtual List<AppointmentHours> AppointmentHours { get; set; }
+         public virtual List<AppointmentHour> AppointmentHours { get; set; }
         public virtual List<Appointment> ClinicAppointments { get; set; }
     }
 }

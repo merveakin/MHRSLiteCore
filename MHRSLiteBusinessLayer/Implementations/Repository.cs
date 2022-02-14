@@ -12,7 +12,10 @@ namespace MHRSLiteBusinessLayer.Implementations
 {
     public class Repository<T> : IRepositoryBase<T> where T : class, new()
     {
-        private readonly MyContext _myContext;
+        //private readonly MyContext _myContext;
+        //_myContext nesnesi protected olursa kalıtımla gittiği yerlerde private şekilde kullanılır.
+        protected readonly MyContext _myContext;
+
         public Repository(MyContext myContext)
         {
             _myContext = myContext;

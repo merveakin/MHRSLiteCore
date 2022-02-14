@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace MHRSLiteBusinessLayer.Implementations
 {
-    public class PatientRepository : Repository<Patient>,IPatientRepository
+    public class PatientRepository : Repository<Patient>, IPatientRepository
     {
-        private readonly MyContext _myContext;
+    //    private readonly MyContext _myContext; >>> Protected'a çekince gerek kalmadı...
         public PatientRepository(MyContext myContext) : base(myContext)
         {
 

@@ -11,11 +11,11 @@ namespace MHRSLiteBusinessLayer.Implementations
 {
     public class AppointmentRepository : Repository<Appointment>, IAppointmentRepository
     {
-        private readonly MyContext _myContext;
+
 
         public AppointmentRepository(MyContext myContext) : base(myContext)
         {
-            _myContext = myContext;
+
         }
     }
 }

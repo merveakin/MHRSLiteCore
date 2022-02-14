@@ -41,7 +41,7 @@ namespace MHRSLiteUI
             //IEmailSender gördüðün zaman bana EmailSender nesnesi üret!
             services.AddScoped<IEmailSender, EmailSender>();
             //**********************************************//
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();    //Çalýþýrken razor sayfasýnda yapýlan deðiþikliklerin sayfaya yansýmasý için eklendi.
             services.AddRazorPages();
             services.AddMvc();
             services.AddSession(options =>

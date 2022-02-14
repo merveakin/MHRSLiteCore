@@ -1,7 +1,9 @@
-﻿using MHRSLiteBusinessLayer.EmailService;
+﻿using MHRSLiteBusinessLayer.Contracts;
+using MHRSLiteBusinessLayer.EmailService;
 using MHRSLiteEntityLayer;
 using MHRSLiteEntityLayer.Enums;
 using MHRSLiteEntityLayer.IdentityModels;
+using MHRSLiteEntityLayer.Models;
 using MHRSLiteUI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -18,22 +20,26 @@ namespace MHRSLiteUI.Controllers
 {
     public class AccountController : Controller
     {
+        //GLOBAL ALAN
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly RoleManager<AppRole> _roleManager;
         private readonly IEmailSender _emailSender;
+        private readonly IUnitOfWork _unitOfWork;
 
         //Dependency Injection
         public AccountController(
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
             RoleManager<AppRole> roleManager,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _emailSender = emailSender;
+            _unitOfWork = unitOfWork;
             CheckRoles();
         }
 
@@ -70,13 +76,12 @@ namespace MHRSLiteUI.Controllers
                 }
 
 
-                var checkUserForUserName = await _userManager.FindByNameAsync(model.UserName);
+                var checkUserForUserName = await _userManager.FindByNameAsync(model.TCNumber);
                 if (checkUserForUserName != null)
                 {
-                    ModelState.AddModelError(nameof(model.UserName), "Bu kullanıcı adı zaten sistemde kayıtlıdır.");
+                    ModelState.AddModelError(nameof(model.TCNumber), "Bu TC Kimlik zaten sistemde kayıtlıdır.");
                     return View(model);
                 }
-
 
                 var checkUserForEmail = await _userManager.FindByEmailAsync(model.Email);
                 if (checkUserForEmail != null)
@@ -101,6 +106,7 @@ namespace MHRSLiteUI.Controllers
                 {
                     var roleResult = await _userManager.AddToRoleAsync(newUser, RoleNames.Patient.ToString());
 
+
                     //Email gönderilmelidir.
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -114,6 +120,20 @@ namespace MHRSLiteUI.Controllers
                     };
 
                     await _emailSender.SendAsync(emailMessage);
+
+                    //Patient eklemesi yapılmalıdır.
+                    Patient newPatient = new Patient()
+                    {
+                        TCNumber = model.TCNumber,
+                        UserId = newUser.Id
+                    };
+
+                    if (_unitOfWork.PatientRepository.Add(newPatient) == false)
+                    {
+                        //Sistem yöneticisine email gitsin...
+
+                    }
+
                     return RedirectToAction("Login", "Account");
                 }
                 else

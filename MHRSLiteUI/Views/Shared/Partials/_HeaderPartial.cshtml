@@ -1,0 +1,33 @@
+﻿@inject SignInManager<AppUser> signInManager
+<header class="top-header">
+    <nav class="navbar header-nav navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/Home/Index">
+                <img src="~/health-theme-assets/images/MHRS103_yan.png" alt="image" style="width:200px">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-wd" aria-controls="navbar-wd" aria-expanded="false" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbar-wd">
+                <ul class="navbar-nav">
+                    <li><a class="nav-link btn btn-default" style="background-color:#46B3AE; color:white;margin-right:5px" href="#home">Randevu Al</a></li>
+                    @if (signInManager.IsSignedIn(Context.User))
+                    {
+
+                        <li>
+                            <a class="nav-link btn btn-default"
+                               style="background-color:#46B3AE; color:white;margin-right:5px" asp-controller="Account" asp-action="Logout">@signInManager.UserManager.FindByNameAsync(Context.User.Identity.Name).Result.Name @signInManager.UserManager.FindByNameAsync(Context.User.Identity.Name).Result.Surname</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li><a class="nav-link btn btn-default" style="background-color:#46B3AE; color:white;margin-right:5px" color:white;" asp-controller="Account" asp-action="Login">Giriş Yap</a></li>
+                    }
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

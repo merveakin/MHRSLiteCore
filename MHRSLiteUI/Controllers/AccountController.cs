@@ -219,6 +219,19 @@ namespace MHRSLiteUI.Controllers
                     return View(model);
                 }
 
+                //user ı bulup emailconfirmed kontrol edilsin.
+                var user = await _userManager
+                    .FindByNameAsync(model.UserName);
+                if (user != null)
+                {
+                    //if (User.EmailConfirmed == false)
+                    if (!user.EmailConfirmed)
+                    {
+                        ModelState.AddModelError("", "Sistemi kullanabilmeniz için üyeliğinizi aktifleştirmeniz gerekmektedir. Emailinize gönderilen aktivasyon linkine tıklayarak aktifleştirme işlemini yapabilirsiniz!");
+                        return View(model);
+                    }
+                }
+
                 var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, true);
 
                 if (result.Succeeded)

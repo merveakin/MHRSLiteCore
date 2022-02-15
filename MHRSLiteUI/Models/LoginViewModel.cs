@@ -8,8 +8,8 @@ namespace MHRSLiteUI.Models
 {
     public class LoginViewModel
     {
-        [Display(Name = "Kullanıcı Adı")]
-        [Required(ErrorMessage = "Kullanıcı adı alanı gereklidir")]
+        [Display(Name ="TC Kimlik Numaranız")]
+        [Required(ErrorMessage ="TC Kimlik alanı gerekllidir!")]
         public string UserName { get; set; }
         [Required(ErrorMessage = "Şifre alanı gereklidir.")]
         [StringLength(100, MinimumLength = 6, ErrorMessage = "Şifreniz minimum 6 karaterli olmalıdır!")]

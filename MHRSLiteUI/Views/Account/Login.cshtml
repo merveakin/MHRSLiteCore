@@ -1,7 +1,7 @@
 ﻿@model LoginViewModel
 @{
     ViewData["Title"] = "Login";
-    Layout = "~/Views/Shared/_LayoutMHRS.cshtml";
+    Layout = "~/Views/Shared/_LayoutAccountMHRS.cshtml";
 }
 
 @if (!string.IsNullOrEmpty(TempData["EmailConfirmedMessage"] as String))
@@ -15,6 +15,12 @@
 }
 <div class="row">
     <div class="col-md-6">
+
+        <div style="text-align:center">
+            <img src="~/health-theme-assets/images/MHRS103_yan.png" style="width:350px" />
+        </div>
+        <br />
+
         <h1 style="font-weight:bold">Giriş Yap</h1>
         <form asp-controller="Account" asp-action="Login" method="post">
             @*<div asp-validation-summary="None"></div>*@ @*Gözükmesin istiyorsan*@

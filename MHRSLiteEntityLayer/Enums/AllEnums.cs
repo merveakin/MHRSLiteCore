@@ -13,8 +13,9 @@ namespace MHRSLiteEntityLayer.Enums
     public enum Genders : byte
     {
         Belirtilmemis,
-        Kadın,
-        Erkek
+        Erkek,
+        Kadın
+        
     }
     public enum RoleNames : byte
     {

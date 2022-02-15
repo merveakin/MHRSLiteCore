@@ -100,7 +100,7 @@ namespace MHRSLiteUI.Controllers
                     Email = model.Email,
                     Name = model.Name,
                     Surname = model.Surname,
-                    UserName = model.UserName,
+                    UserName = model.TCNumber,
                     Gender = model.Gender
                     //TODO : Birthdate?
                     //TODO : Phone Number?

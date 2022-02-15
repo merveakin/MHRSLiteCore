@@ -241,7 +241,7 @@ namespace MHRSLiteUI.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Kullanıcı adı veya şifre hatalıdır!");
+                    ModelState.AddModelError("", "TC Kimlik numarası veya şifre hatalıdır!");
                     return View(model);
                 }
             }
@@ -285,10 +285,11 @@ namespace MHRSLiteUI.Controllers
 
                     var emailMessage = new EmailMessage()
                     {
+                        Contacts = new string[] { user.Email },
                         Subject = "MHRSLITE - Şifremi unuttum",
                         Body = $"Merhaba {user.Name} {user.Surname}," +
-                        $"<br/> Yeni parola belirlemek için " +
-                        $"< a href='{HtmlEncoder.Default.Encode(callBackUrl)}'> Buraya <a/> tıklayınız."
+                                           $" <br/>Yeni parola belirlemek için" +
+                                           $" <a href='{HtmlEncoder.Default.Encode(callBackUrl)}'>buraya</a> tıklayınız. "
                     };
                     await _emailSender.SendAsync(emailMessage);
                     ViewBag.ResetPasswordMessage = "Emailinize şifre güncelleme yönergesi gönderilmiştir.";
@@ -307,7 +308,9 @@ namespace MHRSLiteUI.Controllers
         {
             if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(code))
             {
-                return BadRequest("deneme");
+                //return BadRequest("deneme");
+                ModelState.AddModelError(string.Empty,"Kullanıcı bulunamadı!");
+                return View();
             }
             ViewBag.UserId = userId;
             ViewBag.Code = code;

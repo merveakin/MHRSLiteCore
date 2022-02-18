@@ -1,7 +1,6 @@
 ﻿using MHRSLiteBusinessLayer.Contracts;
 using MHRSLiteBusinessLayer.EmailService;
 using MHRSLiteEntityLayer.IdentityModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -12,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MHRSLiteUI.Controllers
 {
-    public class PatientController : Controller
+    public class CityController : Controller
     {
         //GLOBAL ALAN
         private readonly UserManager<AppUser> _userManager;
@@ -23,7 +22,7 @@ namespace MHRSLiteUI.Controllers
         private readonly IConfiguration _configuration;
 
         //Dependency Injection
-        public PatientController(
+        public CityController(
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
             RoleManager<AppRole> roleManager,
@@ -39,7 +38,6 @@ namespace MHRSLiteUI.Controllers
             _configuration = configuration;
         }
 
-        [Authorize]
         public IActionResult Index()
         {
             try
@@ -52,23 +50,19 @@ namespace MHRSLiteUI.Controllers
                 return View();
             }
         }
-
-        [Authorize]
-        public IActionResult Appointment()
+        public JsonResult GetCityDistricts(int id)
         {
             try
             {
-                ViewBag.Cities = _unitOfWork.CityRepository.GetAll(orderBy:x=>x.OrderBy(a=>a.CityName));
-
-                ViewBag.Clinincs = _unitOfWork.ClinicRepository.GetAll(orderBy: x => x.OrderBy(a => a.ClinicName));
-
-                return View();
+                var data = _unitOfWork.DistrictRepository
+                    .GetAll(x => x.CityId == id, orderBy: x => x.OrderBy(y => y.DistrictName));
+                return Json(new { isSuccess = true, data });
             }
             catch (Exception ex)
             {
-                return View();
+
+                return Json(new { isSuccess = false });
             }
         }
-
     }
 }

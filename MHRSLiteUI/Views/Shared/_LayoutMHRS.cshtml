@@ -16,8 +16,8 @@
     <meta name="keywords" content="">
     <meta name="description" content="">
     <meta name="author" content="">
-
     <!-- Site Icons -->
+
     <link rel="shortcut icon" href="~/health-theme-assets/images/mhrs1.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="~/health-theme-assets/images/apple-touch-icon.png">
 
@@ -36,7 +36,6 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
 </head>
 <body id="home" data-spy="scroll" data-target="#navbar-wd" data-offset="98">
 
@@ -50,6 +49,7 @@
     <!-- Start header -->
     <partial name="Partials/_HeaderPartial"/>
     <!-- End header -->
+
     <!-- Start About us -->
     <div id="about" class="about-box">
         <div class="about-a1">
@@ -80,5 +80,8 @@
     <script src="~/health-theme-assets/js/isotope.min.js"></script>
     <script src="~/health-theme-assets/js/images-loded.min.js"></script>
     <script src="~/health-theme-assets/js/custom.js"></script>
+    @RenderSection("Scripts",false)
+    @*Aynı methodun asenkron versiyonu bulunmaktadır. *@
+    @*@await RenderSectionAsync("Scripts",false)*@  
 </body>
 </html>

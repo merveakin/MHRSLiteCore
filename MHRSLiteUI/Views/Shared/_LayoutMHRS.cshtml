@@ -47,9 +47,8 @@
     </div>end loader -->
     <!-- END LOADER -->
     <!-- Start header -->
-    <partial name="Partials/_HeaderPartial"/>
+    <partial name="Partials/_HeaderPartial" />
     <!-- End header -->
-
     <!-- Start About us -->
     <div id="about" class="about-box">
         <div class="about-a1">
@@ -60,7 +59,7 @@
     </div>
     <!-- End About us -->
 
-    <partial name="Partials/_FooterPartial"/>
+
     <a href="#" id="scroll-to-top" class="new-btn-d br-2"><i class="fa fa-angle-up"></i></a>
 
     <!-- ALL JS FILES -->
@@ -80,8 +79,10 @@
     <script src="~/health-theme-assets/js/isotope.min.js"></script>
     <script src="~/health-theme-assets/js/images-loded.min.js"></script>
     <script src="~/health-theme-assets/js/custom.js"></script>
-    @RenderSection("Scripts",false)
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("Scripts", false)
     @*Aynı methodun asenkron versiyonu bulunmaktadır. *@
-    @*@await RenderSectionAsync("Scripts",false)*@  
+    @*@await RenderSectionAsync("Scripts",false)*@
 </body>
+<partial name="Partials/_FooterPartial" />
 </html>

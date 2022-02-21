@@ -21,6 +21,8 @@ namespace MHRSLiteEntityLayer.Enums
     {
         Passive,
         Admin,
-        Patient
+        Patient,
+        PassiveDoctor,
+        ActiveDoctor
     }
 }

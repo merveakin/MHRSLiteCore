@@ -1,7 +1,7 @@
 ﻿using MHRSLiteBusinessLayer.Contracts;
 using MHRSLiteBusinessLayer.EmailService;
 using MHRSLiteEntityLayer.IdentityModels;
-using Microsoft.AspNetCore.Authorization;
+using MHRSLiteEntityLayer.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MHRSLiteUI.Controllers
 {
-    public class PatientController : Controller
+    public class HospitalController : Controller
     {
         //GLOBAL ALAN
         private readonly UserManager<AppUser> _userManager;
@@ -23,7 +23,7 @@ namespace MHRSLiteUI.Controllers
         private readonly IConfiguration _configuration;
 
         //Dependency Injection
-        public PatientController(
+        public HospitalController(
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
             RoleManager<AppRole> roleManager,
@@ -39,34 +39,27 @@ namespace MHRSLiteUI.Controllers
             _configuration = configuration;
         }
 
-        [Authorize]
-        public IActionResult Index()
+
+
+        public JsonResult GetHospitalFromClinicId(int id,int districtid)
         {
             try
             {
-
-                return View();
+                var data = new List<Hospital>();
+                if (id > 0 && districtid > 0)
+                {
+                    data = _unitOfWork.HospitalClinicRepository
+                        .GetAll(x => x.ClinicId == id)
+                        .Select(y =>
+                        y.Hospital)
+                        .Where(x => x.DistrictId == districtid)
+                        .Distinct().ToList();
+                }
+                return Json(new { isSuccess = true, data });
             }
             catch (Exception ex)
             {
-                return View();
-            }
-        }
-
-        [Authorize]
-        public IActionResult Appointment()
-        {
-            try
-            {
-                ViewBag.Cities = _unitOfWork.CityRepository.GetAll(orderBy:x=>x.OrderBy(a=>a.CityName));
-
-                ViewBag.Clinics = _unitOfWork.ClinicRepository.GetAll(orderBy: x => x.OrderBy(a => a.ClinicName));
-
-                return View();
-            }
-            catch (Exception ex)
-            {
-                return View();
+                return Json(new { isSuccess = false });
             }
         }
     }

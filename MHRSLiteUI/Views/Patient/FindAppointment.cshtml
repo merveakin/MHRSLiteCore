@@ -1,0 +1,44 @@
+﻿@model List<PatientAppointmentViewModel>
+@{
+    ViewData["Title"] = "FindAppointment";
+    Layout = "~/Views/Shared/_LayoutMHRS.cshtml";
+}
+
+<div class="row">
+    @*geri Butonu*@
+</div>
+
+<div class="row">
+    <form asp-controller="Patient" asp-action="SaveAppointment" method="post">
+        <table>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @item.Doctor.AppUser.Name                            @item.Doctor.AppUser.Surname
+                        </td>
+
+                        <td>
+                            En Erken Tarih
+                            @item.AppointmentDate.ToShortDateString() - @item.AvailableHour
+                        </td>
+
+                        <td>
+                            <input class="btn btn-default"
+                                   type="submit"
+                                   value="Randevu Al"
+                                   asp-controller="Patient"
+                                   asp-action="SaveAppointment"
+                                   asp-route-hid="@item.HospitalClinicId"
+                                   asp-route-date="@item.AppointmentDate"
+                                   asp-route-hour="@item.AvailableHour"
+                                   />
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </form>
+</div>

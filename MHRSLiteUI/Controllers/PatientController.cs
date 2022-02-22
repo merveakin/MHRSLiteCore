@@ -1,6 +1,7 @@
 ﻿using MHRSLiteBusinessLayer.Contracts;
 using MHRSLiteBusinessLayer.EmailService;
 using MHRSLiteEntityLayer.IdentityModels;
+using MHRSLiteEntityLayer.Models;
 using MHRSLiteUI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -123,8 +124,8 @@ namespace MHRSLiteUI.Controllers
                                     Doctor = _unitOfWork.
                                     DoctorRepository
                                     .GetFirstOrDefault(x =>
-                                    x.TCNumber==hospitalClinicData.DoctorId,
-                                    includeProperties:"AppUser")
+                                    x.TCNumber == hospitalClinicData.DoctorId,
+                                    includeProperties: "AppUser")
                                 });
 
 
@@ -133,13 +134,55 @@ namespace MHRSLiteUI.Controllers
                     }
                 }
 
-                list = list.Distinct().OrderBy(x=>x.AppointmentDate).ToList();
+                list = list.Distinct().OrderBy(x => x.AppointmentDate).ToList();
                 return View(list);
             }
             catch (Exception)
             {
 
                 throw;
+            }
+        }
+
+        [Authorize]
+        public IActionResult SaveAppointment(int hid, string date, string hour)
+        {
+            try
+            {
+                //Aynı tarih ve saate randevusu var mı?
+                DateTime appointmentDate = Convert.ToDateTime(date);
+                if (_unitOfWork.AppointmentRepository.GetFirstOrDefault(x => x.AppointmentDate == appointmentDate && x.AppointmentHour == hour) != null)
+                {
+                    //Aynı tarihe ve saate başka randevusu var
+                    TempData["SaveAppointmentStatus"] =
+                        $"{date} - {hour} tarihinde bir kliniğe zaten randevu almışsınız. Aynı tarih ve saate başka randevu alamazsınız!";
+                    return RedirectToAction("Index", "Patient");
+                }
+
+                //randevu kayıt edilecek
+                Appointment patientAppointment = new Appointment()
+                {
+                    CreatedDate = DateTime.Now,
+                    PatientId = HttpContext.User.Identity.Name,
+                    HospitalClinicId = hid,
+                    AppointmentDate = appointmentDate,
+                    AppointmentHour = hour
+                };
+
+                bool result = _unitOfWork.AppointmentRepository.Add(patientAppointment);
+                TempData["SaveAppointmentStatus"] =
+                    result ? "Randevunuz başarıyla kaydolmuştur."
+                    : "HATA : Beklenmedik bir hata oluştu!";
+
+                return RedirectToAction("Index", "Patient");
+            }
+            catch (Exception ex)
+            {
+
+                TempData["SaveAppointmentStatus"] = "HATA : " + ex.Message;
+
+                return RedirectToAction("Index", "Patient");
+
             }
         }
     }

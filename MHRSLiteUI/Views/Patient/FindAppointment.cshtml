@@ -31,9 +31,8 @@
                                    asp-controller="Patient"
                                    asp-action="SaveAppointment"
                                    asp-route-hid="@item.HospitalClinicId"
-                                   asp-route-date="@item.AppointmentDate"
-                                   asp-route-hour="@item.AvailableHour"
-                                   />
+                                   asp-route-date="@item.AppointmentDate.ToShortDateString()"
+                                   asp-route-hour="@item.AvailableHour" />
                         </td>
                     </tr>
 

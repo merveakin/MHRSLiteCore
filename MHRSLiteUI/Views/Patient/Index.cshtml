@@ -9,17 +9,34 @@
         @TempData["SaveAppointmentStatus"]
     </div>
 }
-<div class="row">
-    <div class="col-md-4">
 
-        <button asp-controller="Patient" asp-action="Appointment" class="btn btn-block btn-default" style="color:white; background-color:#A7161A; height:100px; margin:40px; border-radius:15px;">
-            <i class="fa fa-h-square" aria-hidden="true" style="transform:scale(3); float:left; margin-left: 40px; margin-top:10px"></i>
-            <span style="font-weight: bold">HASTANE RANDEVUSU AL</span><br />
-            <span style="font-size:12px;">Hastanedeki kliniklerden randevu alabilirsiniz.</span>
-        </button>
-    </div>
 
-    <div class="col-md-8">
+<div style="background-color:#ffffff; border-radius: 18px; margin:30px;">
+    <div class="container-fluid">
+        <div class="row" style=" min-height: calc(100vh - 300px);">
 
+
+            <div class="col-md-4" style="padding-top:30px;">
+                <div class="col-md-12" style="float:left;">
+                    <a asp-controller="Patient" asp-action="Appointment" style="color: white; background-color: #A7161A; height: 200px; border-radius: 20px; display:flex; flex-direction:row; align-items:center;">
+                        <div class="col-md-3" style="display: flex; flex-direction: row; justify-content:flex-end; margin-right:10px;">
+                            <i class="fa fa-h-square" aria-hidden="true" style="transform: scale(4); "></i>
+                        </div>
+                        <div class="col-md-9">
+                            <h4 style="font-weight: bold; color: white;">Hastane Randevusu Al</h4>
+                            <h6 style="color: white;">Hastanede bulunan kliniklerden randevu alabilirsiniz.</h6>
+                        </div>
+
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-8" style="padding-top:30px;">
+                @*Randevularım-Geçmiş Randevularım*@
+                @*ViewComponent ile alınacak*@
+            </div>
+
+
+
+        </div>
     </div>
 </div>

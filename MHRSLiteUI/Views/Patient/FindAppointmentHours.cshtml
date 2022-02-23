@@ -1,0 +1,41 @@
+﻿@model List<AvailableDoctorAppointmentHoursViewModel>
+@{
+    ViewData["Title"] = "FindAppointmentHours";
+    Layout = "~/Views/Shared/_LayoutMHRS.cshtml";
+}
+
+@*Hekim: @Model.Doctor.AppUser.Name  @Model.Doctor.AppUser.Surname*@
+<div class="m-4">
+    <div class="accordion" id="myAccordion">
+        @foreach (var item in Model)
+        {
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapseOne">@item.HourBase</button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#myAccordion">
+
+                    @foreach (var subitem in item.Hours)
+                    {
+                        <div class="card-body">
+                            <button type="button" class="btn btn-primary">
+                                @subitem
+                            </button>
+                            <button type="button" class="btn btn-primary">
+                                @subitem
+                            </button>
+                            <button type="button" class="btn btn-primary">
+                                @subitem
+                            </button>
+                        </div>
+
+
+                    }
+                </div>
+
+            </div>
+
+        }
+    </div>
+</div>
+

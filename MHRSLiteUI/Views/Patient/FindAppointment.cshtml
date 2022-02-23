@@ -1,43 +1,35 @@
-﻿@model List<PatientAppointmentViewModel>
+﻿@model List<AvailableDoctorAppointmentViewModel>
 @{
     ViewData["Title"] = "FindAppointment";
     Layout = "~/Views/Shared/_LayoutMHRS.cshtml";
 }
 
 <div class="row">
-    @*geri Butonu*@
+    @*geri butonu*@
 </div>
-
 <div class="row">
-    <form asp-controller="Patient" asp-action="SaveAppointment" method="post">
-        <table>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @item.Doctor.AppUser.Name                            @item.Doctor.AppUser.Surname
-                        </td>
+    <form asp-controller="Patient" asp-action="FindAppointmentHours" method="post">
+        <div class="list-group">
 
-                        <td>
-                            En Erken Tarih
-                            @item.AppointmentDate.ToShortDateString() - @item.AvailableHour
-                        </td>
-
-                        <td>
-                            <input class="btn btn-default"
-                                   type="submit"
-                                   value="Randevu Al"
-                                   asp-controller="Patient"
-                                   asp-action="SaveAppointment"
-                                   asp-route-hid="@item.HospitalClinicId"
-                                   asp-route-date="@item.AppointmentDate.ToShortDateString()"
-                                   asp-route-hour="@item.AvailableHour" />
-                        </td>
-                    </tr>
-
-                }
-            </tbody>
-        </table>
+            @foreach (var item in Model)
+            {
+                <a asp-controller="Patient" 
+                   asp-action="FindAppointmentHours" 
+                   asp-route-hcid="@item.HospitalClinicId" 
+                   class="list-group-item list-group-item-action col-md-12" style="justify-content:space-between">
+                    <span class="col-md-3">
+                        @item.Doctor.AppUser.Name
+                    @item.Doctor.AppUser.Surname
+                </span>
+                <strong class="col-md-1">
+                    <span style="background: #fafafa; border: 1px solid #d9d9d9; border-radius: 5px; background-color: rgb(45, 183, 245); color:#fff; padding:5px;">
+                        @DateTime.Now.AddDays(1).ToShortDateString()
+                    </span>
+                </strong>
+                <span class="col-md-6">@item.Hospital.HospitalName</span>
+                <span class="col-md-2">@item.Clinic.ClinicName</span>
+            </a>
+        }
+        </div>
     </form>
 </div>

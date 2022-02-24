@@ -79,6 +79,9 @@ namespace MHRSLiteUI.Controllers
         {
             try
             {
+                TempData["ClinicId"] = cid;
+                TempData["HospitalId"] = hid.Value;
+
                 //Dışarıdan gelen hid ve clinicid'nin olduğu HospitalClinic kayıtlarını al
                 var data = _unitOfWork.HospitalClinicRepository
                     .GetAll(x => x.ClinicId == cid
@@ -149,7 +152,7 @@ namespace MHRSLiteUI.Controllers
             }
 
         }
-        
+
         [Authorize]
         public IActionResult FindAppointmentHours(int hcid)
         {
@@ -157,13 +160,21 @@ namespace MHRSLiteUI.Controllers
             {
                 var list = new List<AvailableDoctorAppointmentHoursViewModel>();
 
-                var data = _unitOfWork.AppointmentHourRepository
+                var data = _unitOfWork.
+                    AppointmentHourRepository
                      .GetFirstOrDefault(x => x.HospitalClinicId == hcid);
+
                 var hospitalClinicData =
                          _unitOfWork.HospitalClinicRepository
                          .GetFirstOrDefault(x => x.Id == hcid);
 
+                Doctor dr = _unitOfWork.DoctorRepository
+                    .GetFirstOrDefault(x => x.TCNumber == hospitalClinicData.DoctorId,
+                    includeProperties: "AppUser");
+                ViewBag.Doctor = "Dr." + dr.AppUser.Name + " " + dr.AppUser.Surname;
+
                 var hours = data.Hours.Split(',');
+
                 var appointment = _unitOfWork
                     .AppointmentRepository
                     .GetAll(
@@ -174,6 +185,7 @@ namespace MHRSLiteUI.Controllers
                     x.AppointmentDate < DateTime.Now.AddDays(2)
                     )
                     ).ToList();
+
                 foreach (var houritem in hours)
                 {
                     string myHourBase = houritem.Substring(0, 2) + ":00";
@@ -181,10 +193,9 @@ namespace MHRSLiteUI.Controllers
                         new AvailableDoctorAppointmentHoursViewModel()
                         {
                             AppointmentDate = DateTime.Now.AddDays(1),
-                            Doctor =
-                               _unitOfWork.DoctorRepository
-                               .GetFirstOrDefault(x => x.TCNumber == hospitalClinicData.DoctorId),
-                            HourBase = myHourBase
+                            Doctor = dr,
+                            HourBase = myHourBase,
+                            HospitalClinicId=hcid
                         };
                     list.Add(appointmentHourData);
                     if (appointment.Count(
@@ -194,10 +205,13 @@ namespace MHRSLiteUI.Controllers
                         x.AppointmentHour == houritem
                         ) == 0)
                     {
-                        if (list.Count(x => x.HourBase == myHourBase) > 0)
-                        {
-                            appointmentHourData.Hours.Add(houritem);
-                        }
+                        //if (list.count(x => x.hourbase == myhourbase) > 0)
+                        //{
+                        //    appointmenthourdata.hours.add(houritem);
+                        //}
+
+                        appointmentHourData.Hours.Add(houritem);
+
                     }
 
                 }
@@ -288,7 +302,7 @@ namespace MHRSLiteUI.Controllers
         }
 
         [Authorize]
-        public IActionResult SaveAppointment(int hid, string date, string hour)
+        public IActionResult SaveAppointment(int hcid, string date, string hour)
         {
             try
             {
@@ -307,7 +321,7 @@ namespace MHRSLiteUI.Controllers
                 {
                     CreatedDate = DateTime.Now,
                     PatientId = HttpContext.User.Identity.Name,
-                    HospitalClinicId = hid,
+                    HospitalClinicId = hcid,
                     AppointmentDate = appointmentDate,
                     AppointmentHour = hour
                 };

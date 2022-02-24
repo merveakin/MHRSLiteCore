@@ -3,39 +3,84 @@
     ViewData["Title"] = "FindAppointmentHours";
     Layout = "~/Views/Shared/_LayoutMHRS.cshtml";
 }
-
-@*Hekim: @Model.Doctor.AppUser.Name  @Model.Doctor.AppUser.Surname*@
-<div class="m-4">
-    <div class="accordion" id="myAccordion">
-        @foreach (var item in Model)
-        {
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingOne">
-                    <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapseOne">@item.HourBase</button>
-                </h2>
-                <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#myAccordion">
-
-                    @foreach (var subitem in item.Hours)
-                    {
-                        <div class="card-body">
-                            <button type="button" class="btn btn-primary">
-                                @subitem
-                            </button>
-                            <button type="button" class="btn btn-primary">
-                                @subitem
-                            </button>
-                            <button type="button" class="btn btn-primary">
-                                @subitem
-                            </button>
-                        </div>
-
-
-                    }
-                </div>
+<div style="background-color:#ffffff; border-radius: 18px;">
+    <div class="container-fluid">
+        <div class="row" style=" border-radius: 12px; padding: 30px; min-height: calc(100vh - 300px);">
+            <div class="row col-md-12" style="font-size:20px">
+                <span>
+                    <a asp-controller="Patient" asp-action="FindAppointment"
+                       asp-route-cid="@TempData["ClinicId"]"
+                       asp-route-hid="@TempData["HospitalId"]"><i class="fa fa-arrow-left" style="color:black"></i></a>&emsp;Geri Dön
+                </span>
+                @* Randevu al ve geri butonu *@
+            </div>
+            <div class="row col-md-12" style="font-size:20px">
+                <span>&ensp;</span>
+                <span><b>Hekim:</b> @ViewBag.Doctor</span>
 
             </div>
 
-        }
+            <div class="m-4">
+                <ul class="nav nav-tabs" id="myTab">
+
+                    <li class="nav-item">
+                        <a href="#day" class="nav-link active" data-bs-toggle="tab" style="border-bottom: 2px solid blue;">
+                            @DateTime.Now.AddDays(1).ToShortDateString() - @DateTime.Now.AddDays(1).ToString("dddd")
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="accordion" id="myAccordion">
+                        @{
+                            int sayac = 0;
+                        }
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            if (Model[i].Hours.Count == 0)
+                            {
+                                continue;
+                            }
+
+                            var prevData = string.Empty;
+                            if (i > 0)
+                            {
+                                prevData = Model[i - 1].HourBase.Substring(0, 2);
+                            }
+
+
+
+                            <div class="accordion-item">
+                                @if (string.IsNullOrEmpty(prevData)
+                                     || prevData != Model[i].HourBase.Substring(0, 2)
+                                  )
+                                {
+                                    { sayac++; }
+                                    <h2 class="accordion-header" id="heading@(sayac)">
+                                        <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapse@(sayac)">@Model[i].HourBase</button>
+                                    </h2>
+                                }
+
+                                <div id="collapse@(sayac)" class="accordion-collapse collapse" data-bs-parent="#myAccordion">
+                                    <div class="card-body">
+                                        @foreach (var subitem in Model[i].Hours)
+                                        {
+                                            <a asp-controller="Patient"
+                                               asp-action="SaveAppointment"
+                                               asp-route-hcid="@Model[i].HospitalClinicId"
+                                               asp-route-date="@DateTime.Now.AddDays(1).ToShortDateString()"
+                                               asp-route-hour="@subitem"
+                                               class="btn btn-primary" style="width:100px;">
+                                                @subitem
+                                            </a>
+
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-

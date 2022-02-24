@@ -158,20 +158,21 @@ namespace MHRSLiteUI.Controllers
         {
             try
             {
+
                 var list = new List<AvailableDoctorAppointmentHoursViewModel>();
 
                 var data = _unitOfWork.
-                    AppointmentHourRepository
-                     .GetFirstOrDefault(x => x.HospitalClinicId == hcid);
+                    AppointmentHourRepository.
+                    GetFirstOrDefault(x => x.HospitalClinicId == hcid);
 
                 var hospitalClinicData =
                          _unitOfWork.HospitalClinicRepository
                          .GetFirstOrDefault(x => x.Id == hcid);
-
                 Doctor dr = _unitOfWork.DoctorRepository
-                    .GetFirstOrDefault(x => x.TCNumber == hospitalClinicData.DoctorId,
-                    includeProperties: "AppUser");
+                    .GetFirstOrDefault(x => x.TCNumber == hospitalClinicData.DoctorId
+                    , includeProperties: "AppUser");
                 ViewBag.Doctor = "Dr." + dr.AppUser.Name + " " + dr.AppUser.Surname;
+
 
                 var hours = data.Hours.Split(',');
 
@@ -190,14 +191,17 @@ namespace MHRSLiteUI.Controllers
                 {
                     string myHourBase = houritem.Substring(0, 2) + ":00";
                     var appointmentHourData =
-                        new AvailableDoctorAppointmentHoursViewModel()
-                        {
-                            AppointmentDate = DateTime.Now.AddDays(1),
-                            Doctor = dr,
-                            HourBase = myHourBase,
-                            HospitalClinicId=hcid
-                        };
-                    list.Add(appointmentHourData);
+                      new AvailableDoctorAppointmentHoursViewModel()
+                      {
+                          AppointmentDate = DateTime.Now.AddDays(1),
+                          Doctor = dr,
+                          HourBase = myHourBase,
+                          HospitalClinicId = hcid
+                      };
+                    if (list.Count(x => x.HourBase == myHourBase) == 0)
+                    {
+                        list.Add(appointmentHourData);
+                    }
                     if (appointment.Count(
                         x =>
                         x.AppointmentDate == (
@@ -205,28 +209,20 @@ namespace MHRSLiteUI.Controllers
                         x.AppointmentHour == houritem
                         ) == 0)
                     {
-                        //if (list.count(x => x.hourbase == myhourbase) > 0)
-                        //{
-                        //    appointmenthourdata.hours.add(houritem);
-                        //}
-
-                        appointmentHourData.Hours.Add(houritem);
-
+                        if (list.Count(x => x.HourBase == myHourBase) > 0)
+                        {
+                            list.Find(x => x.HourBase == myHourBase
+                                ).Hours.Add(houritem);
+                        }
                     }
-
                 }
-
-                list = list.Distinct().ToList();
                 return View(list);
-
-
             }
             catch (Exception)
             {
 
                 throw;
             }
-
         }
 
         [Authorize]

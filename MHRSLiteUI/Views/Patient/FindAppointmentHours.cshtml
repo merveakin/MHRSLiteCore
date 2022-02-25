@@ -7,16 +7,13 @@
     <div class="container-fluid">
         <div class="row" style=" border-radius: 12px; padding: 30px; min-height: calc(100vh - 300px);">
             <div class="row col-md-12" style="font-size:20px">
-                <span>
-                    <a asp-controller="Patient" asp-action="FindAppointment"
-                       asp-route-cid="@TempData["ClinicId"]"
-                       asp-route-hid="@TempData["HospitalId"]"><i class="fa fa-arrow-left" style="color:black"></i></a>&emsp;Geri Dön
-                </span>
+                <span><a asp-controller="Patient" asp-action="FindAppointment" asp-route-cid="@TempData["ClinicId"]" asp-route-hid="@TempData["HospitalId"]"><i class="fa fa-arrow-left" style="color:black"></i></a>&emsp;Randevu Al</span>
                 @* Randevu al ve geri butonu *@
             </div>
             <div class="row col-md-12" style="font-size:20px">
                 <span>&ensp;</span>
                 <span><b>Hekim:</b> @ViewBag.Doctor</span>
+
             </div>
 
             <div class="m-4">
@@ -31,52 +28,41 @@
                 <div class="tab-content">
                     <div class="accordion" id="myAccordion">
                         @{
-                            int sayac = 0;
+                            byte sayac = 1;
                         }
-                        @for (int i = 0; i < Model.Count; i++)
+                        @foreach (var item in Model)
                         {
-                            if (Model[i].Hours.Count == 0)
+                            if (item.Hours.Count == 0)
                             {
                                 continue;
                             }
-
-                            var prevData = string.Empty;
-                            if (i > 0)
-                            {
-                                prevData = Model[i - 1].HourBase.Substring(0, 2);
-                            }
-
-
-
                             <div class="accordion-item">
-                                @if (string.IsNullOrEmpty(prevData)
-                                     || prevData != Model[i].HourBase.Substring(0, 2)
-                                  )
-                                {
-                                    { sayac++; }
-                                    <h2 class="accordion-header" id="heading@(sayac)">
-                                        <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapse@(sayac)">@Model[i].HourBase</button>
+
+                                <h2 class="accordion-header" id="heading@(sayac)">
+                                    <button style="height:50px" type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
+                                            data-bs-target="#collapse@(sayac)">
+                                        @item.HourBase
+                                        </button>
                                     </h2>
-                                }
+                                    <div id="collapse@(sayac)" class="accordion-collapse collapse" data-bs-parent="#myAccordion">
+                                        <div class="card-body">
+                                            @foreach (var subitem in item.Hours)
+                                            {
+                                                <a asp-controller="Patient"
+                                                   asp-action="SaveAppointment"
+                                                   asp-route-hcid="@item.HospitalClinicId"
+                                                   asp-route-date="@DateTime.Now.AddDays(1).ToShortDateString()"
+                                                   asp-route-hour="@subitem"
+                                                   class="btn btn-primary" style="width:100px;">
+                                                    @subitem
+                                                </a>
 
-                                <div id="collapse@(sayac)" class="accordion-collapse collapse" data-bs-parent="#myAccordion">
-                                    <div class="card-body">
-                                        @foreach (var subitem in Model[i].Hours)
-                                        {
-                                            <a asp-controller="Patient"
-                                               asp-action="SaveAppointment"
-                                               asp-route-hcid="@Model[i].HospitalClinicId"
-                                               asp-route-date="@DateTime.Now.AddDays(1).ToShortDateString()"
-                                               asp-route-hour="@subitem"
-                                               class="btn btn-primary" style="width:100px;">
-                                                @subitem
-                                            </a>
-
-                                        }
+                                            }
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        }
+                                sayac++;
+                            }
                     </div>
                 </div>
             </div>

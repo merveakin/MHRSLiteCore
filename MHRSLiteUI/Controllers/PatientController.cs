@@ -298,8 +298,9 @@ namespace MHRSLiteUI.Controllers
         }
 
         [Authorize]
-        public IActionResult SaveAppointment(int hcid, string date, string hour)
+        public JsonResult SaveAppointment(int hcid, string date, string hour)
         {
+            var message = string.Empty;
             try
             {
                 //Aynı tarih ve saate randevusu var mı?
@@ -307,9 +308,8 @@ namespace MHRSLiteUI.Controllers
                 if (_unitOfWork.AppointmentRepository.GetFirstOrDefault(x => x.AppointmentDate == appointmentDate && x.AppointmentHour == hour) != null)
                 {
                     //Aynı tarihe ve saate başka randevusu var
-                    TempData["SaveAppointmentStatus"] =
-                        $"{date} - {hour} tarihinde bir kliniğe zaten randevu almışsınız. Aynı tarih ve saate başka randevu alamazsınız!";
-                    return RedirectToAction("Index", "Patient");
+                    message = $"{date} - {hour} tarihinde bir kliniğe zaten randevu almışsınız. Aynı tarih ve saate başka randevu alamazsınız!";
+                    return Json(new { isSuccess = false, message });
                 }
 
                 //randevu kayıt edilecek
@@ -323,18 +323,21 @@ namespace MHRSLiteUI.Controllers
                 };
 
                 bool result = _unitOfWork.AppointmentRepository.Add(patientAppointment);
-                TempData["SaveAppointmentStatus"] =
+
+
+                message =
                     result ? "Randevunuz başarıyla kaydolmuştur."
                     : "HATA : Beklenmedik bir hata oluştu!";
+                return result ? Json(new { isSuccess = true, message })
+                              : Json(new { isSuccess = false, message });
 
-                return RedirectToAction("Index", "Patient");
             }
             catch (Exception ex)
             {
 
-                TempData["SaveAppointmentStatus"] = "HATA : " + ex.Message;
+                message = "HATA : " + ex.Message;
 
-                return RedirectToAction("Index", "Patient");
+                return Json(new { isSuccess = false, message });
 
             }
         }

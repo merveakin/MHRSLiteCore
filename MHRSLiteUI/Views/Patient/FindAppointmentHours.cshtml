@@ -42,30 +42,75 @@
                                     <button style="height:50px" type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
                                             data-bs-target="#collapse@(sayac)">
                                         @item.HourBase
-                                        </button>
-                                    </h2>
-                                    <div id="collapse@(sayac)" class="accordion-collapse collapse" data-bs-parent="#myAccordion">
-                                        <div class="card-body">
-                                            @foreach (var subitem in item.Hours)
-                                            {
-                                                <a asp-controller="Patient"
-                                                   asp-action="SaveAppointment"
-                                                   asp-route-hcid="@item.HospitalClinicId"
-                                                   asp-route-date="@DateTime.Now.AddDays(1).ToShortDateString()"
-                                                   asp-route-hour="@subitem"
-                                                   class="btn btn-primary" style="width:100px;">
-                                                    @subitem
-                                                </a>
+                                    </button>
+                                </h2>
+                                <div id="collapse@(sayac)" class="accordion-collapse collapse" data-bs-parent="#myAccordion">
+                                    <div class="card-body">
+                                        @foreach (var subitem in item.Hours)
+                                        {
+                                            <button type="button"
+                                                    onclick='SaveAppointment(@item.HospitalClinicId,
 
-                                            }
-                                        </div>
+    "@DateTime.Now.AddDays(1).ToShortDateString()",
+    "@subitem", "@ViewBag.Doctor")'
+                                                    class="btn btn-primary" style="width:100px;">
+                                                @subitem
+                                            </button>
+
+                                        }
                                     </div>
                                 </div>
-                                sayac++;
-                            }
+                            </div>
+                            sayac++;
+                        }
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script type="text/javascript">
+        function SaveAppointment(hcid, date, hour, dr) {
+            console.log(hcid);
+            console.log(hour);
+            console.log(date);
+            Swal.fire({
+                title: dr + ' için ' + date + ' tarihine ve ' + hour + ' saatine ' + ' ait randevu alma işleminizi onaylıyor musunuz?',
+                showDenyButton: false,
+                showCancelButton: true,
+                confirmButtonText: 'Onayla',
+                cancelButtonText: 'İptal'
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    //randevuyu kaydedecek actiona resulta ulaşmamız lazım.
+                    $.ajax({
+                        type: "GET",
+                        url: '/Patient/SaveAppointment?hcid=' + hcid
+                            + '&date=' + date +
+                            '&hour=' + hour,
+                        success: function (res) {
+                            Swal.fire({
+                                title: res.message,
+                                showDenyButton: false,
+                                showCancelButton: false
+                            }).then((result) => {
+                                window.open("/Patient/Index", "_self");
+                            });
+                        },
+                        error: function (err) {
+                            Swal.fire(err, '', 'danger')
+                        },
+                    });
+
+                }
+                //else if (result.isDenied) {
+                //    Swal.fire('Changes are not saved', '', 'info')
+                //}
+            });
+        };
+
+    </script>
+} 

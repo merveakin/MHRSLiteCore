@@ -2,7 +2,9 @@ using MHRSLiteBusinessLayer.Contracts;
 using MHRSLiteBusinessLayer.EmailService;
 using MHRSLiteBusinessLayer.Implementations;
 using MHRSLiteDataAccessLayer;
+using MHRSLiteEntityLayer.Enums;
 using MHRSLiteEntityLayer.IdentityModels;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -40,8 +42,17 @@ namespace MHRSLiteUI
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             //IEmailSender gördüðün zaman bana EmailSender nesnesi üret!
             services.AddScoped<IEmailSender, EmailSender>();
+            //IClaimsTransformation gördüðü zaman bizim yazdýðýmýz classý üretecek!
+            services.AddScoped<IClaimsTransformation, ClaimProvider.ClaimProvider>();
             //**********************************************//
-            services.AddControllersWithViews().AddRazorRuntimeCompilation();    //Çalýþýrken razor sayfasýnda yapýlan deðiþikliklerin sayfaya yansýmasý için eklendi.
+
+
+            services.AddAuthorization(opts=> 
+            {
+                opts.AddPolicy("GenderPolicy", policy => policy.RequireClaim("gender", Genders.Kadýn.ToString()));
+            });
+            services.AddControllersWithViews().AddRazorRuntimeCompilation(); 
+            //Çalýþýrken razor sayfasýnda yapýlan deðiþikliklerin sayfaya yansýmasý için eklendi.
             services.AddRazorPages();
             services.AddMvc();
             services.AddSession(options =>

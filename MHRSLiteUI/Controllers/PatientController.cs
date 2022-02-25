@@ -1,5 +1,6 @@
 ﻿using MHRSLiteBusinessLayer.Contracts;
 using MHRSLiteBusinessLayer.EmailService;
+using MHRSLiteEntityLayer.Enums;
 using MHRSLiteEntityLayer.IdentityModels;
 using MHRSLiteEntityLayer.Models;
 using MHRSLiteUI.Models;
@@ -49,7 +50,7 @@ namespace MHRSLiteUI.Controllers
 
                 return View();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return View();
             }
@@ -66,12 +67,11 @@ namespace MHRSLiteUI.Controllers
 
                 return View();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return View();
             }
         }
-
 
         [Authorize]
         public IActionResult FindAppointment(int cityid, int? distid,
@@ -319,7 +319,8 @@ namespace MHRSLiteUI.Controllers
                     PatientId = HttpContext.User.Identity.Name,
                     HospitalClinicId = hcid,
                     AppointmentDate = appointmentDate,
-                    AppointmentHour = hour
+                    AppointmentHour = hour,
+                    AppointmentStatus=AppointmentStatus.Active
                 };
 
                 bool result = _unitOfWork.AppointmentRepository.Add(patientAppointment);
@@ -330,7 +331,7 @@ namespace MHRSLiteUI.Controllers
                     : "HATA : Beklenmedik bir hata oluştu!";
                 return result ? Json(new { isSuccess = true, message })
                               : Json(new { isSuccess = false, message });
-
+                
             }
             catch (Exception ex)
             {

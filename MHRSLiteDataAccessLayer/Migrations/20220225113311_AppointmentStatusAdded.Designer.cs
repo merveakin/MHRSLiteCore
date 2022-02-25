@@ -4,14 +4,16 @@ using MHRSLiteDataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MHRSLiteDataAccessLayer.Migrations
 {
     [DbContext(typeof(MyContext))]
-    partial class MyContextModelSnapshot : ModelSnapshot
+    [Migration("20220225113311_AppointmentStatusAdded")]
+    partial class AppointmentStatusAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -152,7 +154,7 @@ namespace MHRSLiteDataAccessLayer.Migrations
                         .HasMaxLength(5)
                         .HasColumnType("nvarchar(5)");
 
-                    b.Property<byte>("AppointmentStatus")
+                    b.Property<byte?>("AppointmentStatus")
                         .HasColumnType("tinyint");
 
                     b.Property<DateTime>("CreatedDate")

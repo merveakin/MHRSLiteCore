@@ -15,7 +15,7 @@ namespace MHRSLiteEntityLayer.Enums
         Belirtilmemis,
         Erkek,
         Kadın
-        
+
     }
     public enum RoleNames : byte
     {
@@ -24,5 +24,12 @@ namespace MHRSLiteEntityLayer.Enums
         Patient,
         PassiveDoctor,
         ActiveDoctor
+    }
+
+    public enum AppointmentStatus : byte
+    {
+        Past=0,
+        Active=1,
+        Cancelled=2
     }
 }

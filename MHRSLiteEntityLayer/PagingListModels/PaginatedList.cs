@@ -44,8 +44,6 @@ namespace MHRSLiteEntityLayer.PagingListModels
                 .ToList();
             //oluşan listeyi yeni nesne yaratarak gönderir.
             return new PaginatedList<T>(items, count, pageindex, pageSize);
-
-
         }
 
     }

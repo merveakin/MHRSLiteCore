@@ -28,7 +28,7 @@ namespace MHRSLiteBusinessLayer.Implementations
             _userManager = userManager;
         }
 
-        public AppointmentVM GetAppointmentById(string patientid, int hcid, DateTime appointmentDate, string appointmentHour)
+        public AppointmentVM GetAppointmentByID(string patientid, int hcid, DateTime appointmentDate, string appointmentHour)
         {
             try
             {

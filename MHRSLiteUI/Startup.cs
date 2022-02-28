@@ -1,9 +1,11 @@
+using AutoMapper;
 using MHRSLiteBusinessLayer.Contracts;
 using MHRSLiteBusinessLayer.EmailService;
 using MHRSLiteBusinessLayer.Implementations;
 using MHRSLiteDataAccessLayer;
 using MHRSLiteEntityLayer.Enums;
 using MHRSLiteEntityLayer.IdentityModels;
+using MHRSLiteEntityLayer.Mappings;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -45,7 +47,7 @@ namespace MHRSLiteUI
             //IClaimsTransformation gördüðü zaman bizim yazdýðýmýz classý üretecek!
             services.AddScoped<IClaimsTransformation, ClaimProvider.ClaimProvider>();
             //**********************************************//
-
+            services.AddAutoMapper(typeof(Maps));
 
             services.AddAuthorization(opts=> 
             {

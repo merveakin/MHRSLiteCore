@@ -1,4 +1,20 @@
 ﻿@model PastAndFutureAppointmentsViewModel
+@{
+    //Geçmiş randevular paginatedlist'te tutuluyor.
+    //Previous page varsa aktif yoksa pasif olmasını tutan string değişken
+    string prevDisabledForPast = Model.PastAppointments.PreviousPage ? "" : "disabled";
+
+    string nextDisabledForPast = Model.PastAppointments.NextPage ? "" : "disabled";
+}
+
+@{
+    //Aktif randevular paginatedlist'te tutuluyor.
+    //Previous page varsa aktif yoksa pasif olmasını tutan string değişken
+    string prevDisabledForUpcoming = Model.UpcomingAppointments.PreviousPage ? "" : "disabled";
+
+    string nextDisabledForUpcoming = Model.UpcomingAppointments.NextPage ? "" : "disabled";
+}
+
 <div class="m-4">
     <ul class="nav nav-tabs" id="myTab">
 
@@ -14,6 +30,34 @@
         <div class="tab-pane active" id="myAppointments">
             <table class="table" style="margin-top:15px">
                 <tbody>
+                    @if (Model.UpcomingAppointments.Count > 0)
+                    {
+                        <tr>
+                            <td>
+                                <form asp-controller="Patient"
+                                      asp-action="UpcomingAppointmentsExcelExport"
+                                      method="post">
+                                    <button type="submit" class="btn btn-sm btn-default"
+                                            style="float:right">
+                                        <span>
+                                            <i class="fa fa-print"></i>
+                                        </span>
+                                    </button>
+                                </form>
+
+                                <button type="button"
+                                        onclick="UpcomingAppointmentsExcelExportBtnClicked()"
+                                        class="btn btn-sm btn-default"
+                                        style="float:right">
+                                    <span>
+                                        <i class="fa fa-print"></i>
+                                    </span>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+
+
                     @foreach (var item in Model.UpcomingAppointments)
                     {
                         <tr>
@@ -25,15 +69,38 @@
                                 </strong><br />
                             </td>
                             <td>
-                               Hastane <br />
-                                Klinik Doktor
+                                @item.HospitalClinic.Hospital.HospitalName
+                                <br />
+                                @item.HospitalClinic.Clinic.ClinicName
+                                <br />
+                                @item.HospitalClinic.Doctor.AppUser.Name
+                                @item.HospitalClinic.Doctor.AppUser.Surname
                             </td>
 
+                            <td>
+                                <button onclick="CancelAppointmentBtnClicked(@item.Id)"
+                                        class="btn btn-danger btn-sm">
+                                    @*İptal Et*@
+                                    <i class="bi bi-x-circle"></i>
+                                </button>
+                            </td>
                         </tr>
                     }
                 </tbody>
             </table>
+
+            @* Önceki sayfa ve sonraki sayfa butonları *@
+            <a asp-controller="Patient" asp-action="Index" asp-route-pageNumberFuture="@(Model.UpcomingAppointments.PageIndex-1)"
+               class="btn @prevDisabledForUpcoming" style="float:right">
+                Önceki sayfa
+            </a>
+
+            <a asp-controller="Patient" asp-action="Index" asp-route-pageNumberFuture="@(Model.UpcomingAppointments.PageIndex+1)"
+               class="btn @nextDisabledForUpcoming" style="float:left">
+                Sonraki sayfa
+            </a>
         </div>
+        
         <div class="tab-pane fade" id="myPastAppointments">
             <table class="table" style="margin-top:15px">
                 <tbody>
@@ -57,6 +124,18 @@
                     }
                 </tbody>
             </table>
+
+            @* Önceki sayfa ve sonraki sayfa butonları *@
+            <a asp-controller="Patient" asp-action="Index" asp-route-pageNumberPast="@(Model.PastAppointments.PageIndex-1)"
+               class="btn @prevDisabledForPast" style="float:right">
+                Önceki sayfa
+            </a>
+
+            <a asp-controller="Patient" asp-action="Index" asp-route-pageNumberPast="@(Model.PastAppointments.PageIndex+1)"
+               class="btn @nextDisabledForPast" style="float:left">
+                Sonraki sayfa
+            </a>
+
         </div>
     </div>
 </div>

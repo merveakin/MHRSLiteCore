@@ -56,7 +56,7 @@ namespace MHRSLiteUI.Controllers
 
                 return View();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return View();
             }

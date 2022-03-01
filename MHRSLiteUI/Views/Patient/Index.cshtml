@@ -29,17 +29,16 @@
 
 
                         <a asp-controller="Home" asp-action="Deneme" class="btn btn-default">Deneme Claims</a>
-
-
-
-
-
                     </a>
                 </div>
             </div>
             <div class="col-md-8" style="padding-top:30px;">
-               @await Component.InvokeAsync("PatientAppointments")
-               
+                @await Component.InvokeAsync("PatientAppointments", new
+                 {
+                     pageNumberPast = ViewBag.PageNumberPast,
+                     pageNumberFuture = ViewBag.PageNumberFuture
+                 })
+
             </div>
 
 

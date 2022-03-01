@@ -80,8 +80,8 @@
                             <td>
                                 <button onclick="CancelAppointmentBtnClicked(@item.Id)"
                                         class="btn btn-danger btn-sm">
-                                    @*İptal Et*@
-                                    <i class="bi bi-x-circle"></i>
+                                    İptal Et
+                                    @*<i class="bi bi-x-circle"></i>*@
                                 </button>
                             </td>
                         </tr>
@@ -91,16 +91,16 @@
 
             @* Önceki sayfa ve sonraki sayfa butonları *@
             <a asp-controller="Patient" asp-action="Index" asp-route-pageNumberFuture="@(Model.UpcomingAppointments.PageIndex-1)"
-               class="btn @prevDisabledForUpcoming" style="float:right">
+               class="btn @prevDisabledForUpcoming" style="float:left">
                 Önceki sayfa
             </a>
 
             <a asp-controller="Patient" asp-action="Index" asp-route-pageNumberFuture="@(Model.UpcomingAppointments.PageIndex+1)"
-               class="btn @nextDisabledForUpcoming" style="float:left">
+               class="btn @nextDisabledForUpcoming" style="float:right">
                 Sonraki sayfa
             </a>
         </div>
-        
+
         <div class="tab-pane fade" id="myPastAppointments">
             <table class="table" style="margin-top:15px">
                 <tbody>
@@ -112,12 +112,24 @@
                                     <span style="background: #fafafa; border: 1px solid #d9d9d9; border-radius: 5px; background-color: rgb(45, 183, 245); color:#fff; padding:5px;">
                                         @item.AppointmentDate.ToShortDateString() - @item.AppointmentHour
                                     </span>
+
+                                    @if (item.AppointmentStatus == MHRSLiteEntityLayer.Enums.AppointmentStatus.Cancelled)
+                                    {
+                                        <span style="background: #fafafa; border: 1px solid #d9d9d9; border-radius: 5px; background-color: red; color:#fff; padding:5px;">
+                                            İPTAL
+                                        </span>
+                                    }
+
                                 </strong><br />
                                 @*<i class="fa fa-repeat"></i>*@
                             </td>
                             <td>
-                                Hastane <br />
-                                Klinik Doktor
+                                @item.HospitalClinic.Hospital.HospitalName
+                                <br />
+                                @item.HospitalClinic.Clinic.ClinicName
+                                <br />
+                                @item.HospitalClinic.Doctor.AppUser.Name
+                                @item.HospitalClinic.Doctor.AppUser.Surname
                             </td>
 
                         </tr>
@@ -127,12 +139,12 @@
 
             @* Önceki sayfa ve sonraki sayfa butonları *@
             <a asp-controller="Patient" asp-action="Index" asp-route-pageNumberPast="@(Model.PastAppointments.PageIndex-1)"
-               class="btn @prevDisabledForPast" style="float:right">
+               class="btn @prevDisabledForPast" style="float:left">
                 Önceki sayfa
             </a>
 
             <a asp-controller="Patient" asp-action="Index" asp-route-pageNumberPast="@(Model.PastAppointments.PageIndex+1)"
-               class="btn @nextDisabledForPast" style="float:left">
+               class="btn @nextDisabledForPast" style="float:right">
                 Sonraki sayfa
             </a>
 

@@ -420,7 +420,7 @@ namespace MHRSLiteUI.Controllers
         {
             try
             {
-                DataTable dt = new DataTable();
+                DataTable dt = new DataTable("Grid");
                 var patientId = HttpContext.User.Identity.Name;
                 var data = _unitOfWork.AppointmentRepository
                     .GetUpComingAppointments(patientId);
@@ -457,7 +457,6 @@ namespace MHRSLiteUI.Controllers
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Grid.xlsx");
                     }
                 }
-
             }
             catch (Exception)
             {

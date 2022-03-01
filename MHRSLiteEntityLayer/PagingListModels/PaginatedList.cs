@@ -11,11 +11,11 @@ namespace MHRSLiteEntityLayer.PagingListModels
         public int PageIndex { get; set; }
         public int TotalPages { get; set; }
         public List<T> ItemList { get; set; }
-
         public PaginatedList(List<T> items, int count, int pageindex, int pageSize)
         {
             PageIndex = pageindex;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+            this.AddRange(items);
             ItemList = items;
         }
         public bool PreviousPage

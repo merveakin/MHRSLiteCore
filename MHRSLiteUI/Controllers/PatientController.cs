@@ -191,7 +191,7 @@ namespace MHRSLiteUI.Controllers
                     &&
                     x.AppointmentDate < DateTime.Now.AddDays(2)
                     )
-                    ).ToList();
+                    && x.AppointmentStatus != AppointmentStatus.Cancelled).ToList();
 
                 foreach (var houritem in hours)
                 {
@@ -311,7 +311,10 @@ namespace MHRSLiteUI.Controllers
             {
                 //Aynı tarih ve saate randevusu var mı?
                 DateTime appointmentDate = Convert.ToDateTime(date);
-                if (_unitOfWork.AppointmentRepository.GetFirstOrDefault(x => x.AppointmentDate == appointmentDate && x.AppointmentHour == hour) != null)
+                if (_unitOfWork.AppointmentRepository
+                    .GetFirstOrDefault(x => x.AppointmentDate == appointmentDate
+                    && x.AppointmentHour == hour
+                    && x.AppointmentStatus!=AppointmentStatus.Cancelled) != null)
                 {
                     //Aynı tarihe ve saate başka randevusu var
                     message = $"{date} - {hour} tarihinde bir kliniğe zaten randevu almışsınız. Aynı tarih ve saate başka randevu alamazsınız!";

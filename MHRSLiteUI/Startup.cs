@@ -49,11 +49,11 @@ namespace MHRSLiteUI
             //**********************************************//
             services.AddAutoMapper(typeof(Maps));
 
-            services.AddAuthorization(opts=> 
+            services.AddAuthorization(opts =>
             {
                 opts.AddPolicy("GenderPolicy", policy => policy.RequireClaim("gender", Genders.Kadýn.ToString()));
             });
-            services.AddControllersWithViews().AddRazorRuntimeCompilation(); 
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
             //Çalýþýrken razor sayfasýnda yapýlan deðiþikliklerin sayfaya yansýmasý için eklendi.
             services.AddRazorPages();
             services.AddMvc();
@@ -63,7 +63,7 @@ namespace MHRSLiteUI
             });
 
             //*********************************************//
-            services.AddIdentity<AppUser, AppRole>(opts=>
+            services.AddIdentity<AppUser, AppRole>(opts =>
             {
                 opts.User.RequireUniqueEmail = true;
                 opts.Password.RequiredLength = 6;
@@ -77,7 +77,8 @@ namespace MHRSLiteUI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
+            UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IUnitOfWork unitOfWork)
         {
             if (env.IsDevelopment())
             {
@@ -100,7 +101,8 @@ namespace MHRSLiteUI
             app.UseAuthentication(); //login logout kullanabilmek için
             app.UseAuthorization(); //authorization attiribute kullanabilmek için
 
-
+            //Sabit datalarýn eklenmesi için static metodu çaðýralým.
+            CreateDefaultData.CreateData.Create(userManager, roleManager, unitOfWork, Configuration, env);
 
             app.UseEndpoints(endpoints =>
             {
@@ -111,7 +113,7 @@ namespace MHRSLiteUI
                 endpoints.MapAreaControllerRoute(
                     "management",
                     "management",
-                    "management/{controller=Admin}/{action=Index}/{id?}"         
+                    "management/{controller=Admin}/{action=Index}/{id?}"
                     );
 
             });

@@ -44,24 +44,9 @@ namespace MHRSLiteUI.Controllers
             _emailSender = emailSender;
             _unitOfWork = unitOfWork;
             _configuration = configuration;
-            CheckRoles();
+
         }
 
-        private void CheckRoles()
-        {
-            var allRoles = Enum.GetNames(typeof(RoleNames));
-            foreach (var item in allRoles)
-            {
-                if (!_roleManager.RoleExistsAsync(item).Result)
-                {
-                    var result = _roleManager.CreateAsync(new AppRole()
-                    {
-                        Name = item,
-                        Description = item
-                    }).Result;
-                }
-            }
-        }
 
         [HttpGet]
         public IActionResult Register()

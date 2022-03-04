@@ -168,7 +168,7 @@ namespace MHRSLiteBusinessLayer.Implementations
             }
         }
         /// <summary>
-        /// Verilen tarihten büyük olan iptal edilmemiş, aktf ya da geçmiş DAHİLİYE randevularını getirir.
+        /// Verilen tarihten büyük olan iptal edilmemiş, aktif ya da geçmiş DAHİLİYE randevularını getirir.????
         /// IM_____DAHİLİYE
         /// </summary>
         /// <param name="dt"></param>
@@ -185,14 +185,15 @@ namespace MHRSLiteBusinessLayer.Implementations
                              on hcid.ClinicId equals c.Id
                              where c.ClinicName
                              == ClinicsConstants.INTERNAL_MEDICINE
-                             && a.AppointmentStatus !=
-                             AppointmentStatus.Cancelled
+                             && a.AppointmentStatus ==
+                             AppointmentStatus.Past
                              select a;
 
 
                 if (dt != null)
                 {
-                    var date = Convert.ToDateTime(dt.Value.ToShortDateString());
+                    //var date = Convert.ToDateTime(dt.Value.ToShortDateString());
+                    var date = Convert.ToDateTime(dt.Value.ToString("dd/MM/yyyy"));
                     result = result.Where(x => x.AppointmentDate >= date);
                 }
 

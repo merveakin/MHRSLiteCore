@@ -340,5 +340,10 @@ namespace MHRSLiteUI.Controllers
                 return View(model);
             }
         }
+    
+        //public IActionResult GoogleLogin(string ReturnUrl)
+        //{
+        //    //Yaron devam edecek... 08/03/2022
+        //}
     }
 }

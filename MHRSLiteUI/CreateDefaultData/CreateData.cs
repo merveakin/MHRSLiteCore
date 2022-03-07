@@ -25,7 +25,7 @@ namespace MHRSLiteUI.CreateDefaultData
         {
             //Eklenmesini istediğim verileri ekleyecek metotları çağıralım...
             CheckRoles(roleManager);
-            // CreateCities(environment, unitOfWork);
+            //CreateCities(environment, unitOfWork);
             CreateClinics(environment, unitOfWork);
 
             //Bu yöntemle sadece CheckRoles ve Cities'in import edilmesi uygundur.

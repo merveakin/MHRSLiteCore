@@ -24,9 +24,51 @@ namespace MHRSLiteUI.CreateDefaultData
             IWebHostEnvironment environment)
         {
             //Eklenmesini istediğim verileri ekleyecek metotları çağıralım...
-            CheckRoles(roleManager);
-            CreateCities(environment, unitOfWork);
+            //CheckRoles(roleManager);
+            //CreateCities(environment, unitOfWork);
+            CreateClinics(environment, unitOfWork);
         }
+
+        private static void CreateClinics(IWebHostEnvironment environment, IUnitOfWork unitOfWork)
+        {
+            try
+            {
+                var clinicList = unitOfWork.ClinicRepository.GetAll().ToList();
+                //Provide a path for excel file
+                //Excel dosyasının bulunduğu yolu aldık.
+                string path = Path.Combine(environment.WebRootPath, "Excels");
+                string fileName = Path.GetFileName("Clinics.xlsx");
+                string filePath = Path.Combine(path, fileName);
+                using (var excelBook = new XLWorkbook(filePath))
+                {
+                    var rows = excelBook.Worksheet(1).RowsUsed();
+                    foreach (var item in rows)
+                    {
+                        if (item.RowNumber() > 1 && item.RowNumber() <= rows.Count())
+                        {
+                            var cell = item.Cell(1).Value;
+                            Clinic clinic = new Clinic()
+                            {
+                                CreatedDate = DateTime.Now,
+                                ClinicName = cell.ToString()
+                            };
+                            if (clinicList
+                                .Count(x => x.ClinicName.ToLower()
+                                == cell.ToString().ToLower()) == 0)
+                            {
+                                unitOfWork.ClinicRepository.Add(clinic);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
         private static void CheckRoles(RoleManager<AppRole> roleManager)
         {
             var allRoles = Enum.GetNames(typeof(RoleNames));
@@ -58,14 +100,16 @@ namespace MHRSLiteUI.CreateDefaultData
                     {
                         if (item.RowNumber() > 1 && item.RowNumber() <= rows.Count())
                         {
-                            var cell = item.Cell(2).Value;//İstanbul
+                            var cell = item.Cell(1).Value;//İstanbul
+                            var plateCode = item.Cell(2).Value;
                             City city = new City()
                             {
                                 CreatedDate = DateTime.Now,
                                 CityName = cell.ToString(),
-                                PlateCode = Convert.ToByte(item.Cell(3).Value)
+                                PlateCode = Convert.ToByte(plateCode)
                             };
                             unitOfWork.CityRepository.Add(city);
+                            //Geri döneceğiz.
                         }
                     }
                 }

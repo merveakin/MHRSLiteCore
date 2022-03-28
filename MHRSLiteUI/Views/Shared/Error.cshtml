@@ -6,12 +6,23 @@
 <h1 class="text-danger">Error.</h1>
 <h2 class="text-danger">An error occurred while processing your request.</h2>
 
-@if (Model.ShowRequestId)
+<form asp-controller="Home"
+      asp-action="Error"
+      method="post">
+    <button type="submit" class="btn btn-sm btn-default"
+            style="float:right">
+        <span>
+            AnaSayfaya Dön
+        </span>
+    </button>
+</form>
+
+@*@if (Model.ShowRequestId)
 {
     <p>
         <strong>Request ID:</strong> <code>@Model.RequestId</code>
     </p>
-}
+}*@
 
 <h3>Development Mode</h3>
 <p>

@@ -21,7 +21,7 @@ namespace MHRSLiteUI.Components
             _unitOfWork = unitOfWork;
         }
 
-        public IViewComponentResult Invoke(int pageNumberPast = 1, int pageNumberFuture=1)
+        public IViewComponentResult Invoke(int pageNumberPast = 1, int pageNumberFuture = 1)
         {
             PastAndFutureAppointmentsViewModel data =
                 new PastAndFutureAppointmentsViewModel();
@@ -43,40 +43,9 @@ namespace MHRSLiteUI.Components
 
             data.PastAppointments = PaginatedList<AppointmentVM>
                 .CreateAsync(pastAndCancelledAppointments, pageNumberPast, 4);
+            //
 
-
-
-            //data.UpcomingAppointments = _unitOfWork.AppointmentRepository
-            //    .GetAll(x =>
-            //    x.PatientId == HttpContext.User.Identity.Name
-            //    &&
-            //    x.AppointmentDate > today
-            //    ||
-            //    (x.AppointmentDate == today
-            //    &&
-            //    (Convert.ToInt32(x.AppointmentHour.Substring(0, 2)) > DateTime.Now.Hour
-            //    ||
-            //    (Convert.ToInt32(x.AppointmentHour.Substring(0, 2)) == DateTime.Now.Hour
-            //    &&
-            //    Convert.ToInt32(x.AppointmentHour.Substring(3, 2)) >= DateTime.Now.Minute)))
-            //    , includeProperties: "HospitalClinic").ToList();
-
-            //data.PastAppointments = _unitOfWork.AppointmentRepository
-            //    .GetAll(x =>
-            //    x.PatientId == HttpContext.User.Identity.Name
-            //    &&
-            //    x.AppointmentDate <= today
-            //    &&
-            //    (x.AppointmentDate == today
-            //    &&
-            //    (Convert.ToInt32(x.AppointmentHour.Substring(0, 2)) < DateTime.Now.Hour
-            //    ||
-            //    (Convert.ToInt32(x.AppointmentHour.Substring(0, 2)) == DateTime.Now.Hour
-            //    &&
-            //    Convert.ToInt32(x.AppointmentHour.Substring(3, 2)) < DateTime.Now.Minute)))
-            //    , includeProperties: "HospitalClinic").ToList();
-
-
+            //
             return View(data);
         }
     }

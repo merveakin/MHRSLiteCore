@@ -87,6 +87,7 @@ namespace MHRSLiteUI.QuartzWork
             {
 
                 //loglanacak
+                throw;
 
             }
         }

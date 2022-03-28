@@ -315,7 +315,8 @@ namespace MHRSLiteUI.Controllers
                 if (_unitOfWork.AppointmentRepository
                     .GetFirstOrDefault(x => x.AppointmentDate == appointmentDate
                     && x.AppointmentHour == hour
-                    && x.AppointmentStatus != AppointmentStatus.Cancelled) != null)
+                    && x.AppointmentStatus != AppointmentStatus.Cancelled 
+                    && x.PatientId==HttpContext.User.Identity.Name) != null)
                 {
                     //Aynı tarihe ve saate başka randevusu var
                     message = $"{date} - {hour} tarihinde bir kliniğe zaten randevu almışsınız. Aynı tarih ve saate başka randevu alamazsınız!";
